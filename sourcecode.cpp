@@ -127,3 +127,198 @@ void shopping::administrator()
 	}
 	goto m;
 }
+
+void shopping::buyer()
+{
+	m:
+	int choice;
+	cout<<"\t\t\t   Buyer   \n";
+	cout<<"\t\t\t__________________\n";
+	cout<<"                        \n";
+	cout<<"\t\t\t    1)Buy Product \n";
+	cout<<"                        \n";
+	cout<<"\t\t\t    2) Go back    \n";
+	
+	cout<<"enter your choice";
+	cin>>choice;
+	
+	switch(choice)
+	{
+		case 1:
+			receipt();
+			break;
+		case 2:
+			menu();
+		
+		default:
+		   cout<<"Invalid Choice";
+		   
+		   	
+			
+	}
+	
+	goto m;
+}
+
+void shopping::add()
+{
+	m:
+	fstream data;
+	int c;
+	int token=0;
+	float p;
+	float d;
+	string n;
+	cout<<"\n\n\t\t\t Add new product";
+	cout<<"\n\n\t product code of the product ";
+	cin>>ProductCode;
+	cout<<"/n/n\t Name of the product ";
+	cin>>ProductName;
+	cout<<"Price of the product ";
+	cin>>price;
+	cout"\n\n\t Discount on the product ";
+	cin>>dis;
+	
+	data.open("database.txt",ios::in);
+	
+	if(!data)
+	{
+		data.open("data.txt", ios::app|ios::out);
+		data<<" "<<ProductCode<<" "<<ProductName<<" "<<price<<" "<<dis<<"\n";
+		data.clode();
+	}
+	else
+	{
+		data>>c>>n>>p>>d;
+		
+		while(!data.eof())
+		{
+			if(c==ProductCode)
+			{
+				token++;
+			}
+			data.close();
+		}
+	
+	if(token==1)
+	{
+		goto m;
+	}
+	else
+	{
+		data.open("data.txt", ios::app|ios::out);
+		data<<" "<<ProductCode<<" "<<ProductName<<" "<<price<<" "<<dis<<"\n";
+		data.clode();
+	}
+    }
+    cout<<"\n\n\t\t Record Inserted ";
+}
+
+void shopping::edit()
+{
+	fstream data,data1;
+	int pkey;
+	int token=0;
+	int c;
+	float p;
+	float d;
+	string n;
+	
+	cout<<"\n\n\t\t Modify the record ";
+	cout<<"\n\t\t\t Product code: ";
+	cin>>pkey;
+	
+	data.open("database.txt",ios::in);
+	if(!data)
+	{
+		cout<<"\n\n File doens't Exist ";
+	}
+	else
+	{
+		data1.open("database1.txt", ios::app|ios::out);
+		data>>ProductCode>>ProductName>>price>>dis;
+		
+		while(!data.eof())
+		{
+			if(pkey==ProductCode)
+			{
+				cout<<"\n\n\t\t Product new code: ";
+				cin>>c;
+				cout<<"\n\t\t Name of the product: ";
+				cin>>n;
+				cout<<"\n\t\t Price: ";
+				cin>>p;
+				cout<<"\n\t\t Discount: ";
+				cin>>d;
+				data1<<" "<<c<<" "<<n<<" "<<p<<" "<<d<<"\n";
+				cout<<"Record Edited";
+				token++;
+			}
+			else
+			{
+				data1<<" "<<ProductCode<<" "<<ProductName<<" "<<price<<dis<<"\n";
+			}
+			data>>ProductCode>>ProductName>>price>>dis;
+			
+		}
+		data.close();
+		data1.close();
+		
+		remove("database.txt");
+		rename("database1.txt","database.txt");		
+		
+		if(token==0)
+		{
+			cout<<"\n\n Record not found Sorry! ";
+		}
+		
+	}
+	
+	
+	
+	
+}
+
+void shopping::remove()
+{
+	fstream data,data1;
+	int pkey;
+	int token=0;
+	cout<<"\n\n\t Delete Product ";
+	cout<<"\n\n\t Product code: ";
+	cin>>pkey;
+	data.open("database.txt", ios::in);
+	if(!data)
+	{
+		cout<<"File doesn't exist ";
+	}
+	else
+	{
+		data1.open("database1.txt",ios::app|ios::out);
+		data>>ProductCode>>ProductName>>price>>dis;
+		
+		while(!data.eof())
+		{
+			if(ProductCode==pkey)
+			{
+				cout<<"\n\n\t Product deleted successfully ";
+				token++;
+			}
+			else
+			{
+				data1<<ProductCode<<" "<<ProductName<<" "<<price<<" "<<dis<<"\n";
+			}
+			data>>ProductCode>>ProductName>>price>>dis;
+		}
+		data.close();
+		data1.close();
+		remove("database.txt");
+		rename("database1.txt","database1.txt");
+		
+		if(token==0)
+		{
+			cout<<"\n\t\t Record not found ";
+		}
+		
+	}
+}
